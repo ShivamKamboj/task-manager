@@ -1,22 +1,24 @@
-const mysql=require("mysql")
+//const mysql = require("mysql")
 
 //configuration for mysql database
-var mysqlConnection=mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"root",
-    database:"taskmanager",
-    multipleStatements:true
+/*var mysqlConnection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database: "taskmanager",
+    multipleStatements: true
 })
 
-mysqlConnection.connect((err)=>{
-    if(!err)
-    {
-        console.log("connected")
-    }
-    else{
-        console.error("Connection failed")
-    }
+mysqlConnection.connect((err) => {
+    if (err) throw err
+    console.log("Connection sucessful")
+    var sql = "select * from task"
+
+    mysqlConnection.query(sql,(err, result) => {
+        if (err) throw err;
+        console.log(result);
+    })
 })
 
-module.exports=mysqlConnection
+module.exports = mysqlConnection
+*/
