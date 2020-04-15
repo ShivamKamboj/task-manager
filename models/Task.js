@@ -1,30 +1,18 @@
-const sequelize = require('sequelize')
-    //database
-const db = require("../config/database")
-
-const Task = db.define(
-    'task', {
-        // title: {
-        //     type: sequelize.STRING
-        // },
-        // description: {
-        //     type: sequelize.STRING
-        // },
-        // due_date: {
-        //     type: sequelize.DATE
-        // },
-        // priority: {
-        //     type: sequelize.STRING
-        // },
-        // status: {
-        //     type: sequelize.STRING
-        // }
-        // title for each task, should be string and null should be false
+const createModelTask = function createModelTask(queryInterface, sequelize) {
+    const Task = queryInterface.define('task', {
+        //id for each task
+        id: {
+            type: sequelize.DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: sequelize.DataTypes.UUIDV4,
+            allowNull: true
+        },
+        // title for each task, string and not-null
         title: {
             type: sequelize.STRING,
             allowNull: false
         },
-        // description for each task, should be string and can be null too
+        // description for each task, string and can be null
         description: {
             type: sequelize.STRING,
             allowNull: true
@@ -32,13 +20,16 @@ const Task = db.define(
         // due date for each task, should be date and by default should be next date
         duedate: {
             type: sequelize.DATEONLY,
-            allowNull: false,
+            allowNull: false
         },
-
+        // status for each task, should be boolean and by default false
+        status: {
+            type: sequelize.BOOLEAN,
+            defaultValue: false
+        },
         /** 
-         * priority for each task, should be string and 
-         * by default set the value by medium and 
-         * can have HIGH, LOW, MEDIUM
+         * priority for each task, should be string in:-
+         * (HIGH, LOW, MEDIUM)
          */
         priority: {
             type: sequelize.ENUM,
@@ -49,12 +40,11 @@ const Task = db.define(
                     ["LOW", "MEDIUM", "HIGH"]
                 ]
             }
-        },
-        // status for each task, should be boolean and by default should be false
-        status: {
-            type: sequelize.BOOLEAN,
-            defaultValue: false
         }
-    })
+    });
+    return Task;
+}
 
-module.exports = Task;
+module.exports = {
+    createTaskModel: createModelTask
+}
