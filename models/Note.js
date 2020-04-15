@@ -12,8 +12,8 @@ const createModelNote = function createModelNote(queryInterface, sequelize) {
             type: sequelize.STRING,
             allowNull: false
         },
-    });
-    return Note;
+    })
+    return Note
 }
 
 module.exports = {

@@ -41,8 +41,8 @@ const createModelTask = function createModelTask(queryInterface, sequelize) {
                 ]
             }
         }
-    });
-    return Task;
+    })
+    return Task
 }
 
 module.exports = {
