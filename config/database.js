@@ -14,13 +14,13 @@ const model = require('../models/modelHandler')
 //     }
 // })
 
-const db = new Sequelize({
+const db = new sequelize({
     dialect: 'sqlite',
     storage: __dirname + '/taskmanager.db'
 });
 
-const task = model.task.createTaskModel(db, Sequelize);
-const note = model.note.createNoteModel(db, Sequelize);
+const task = model.task.createTaskModel(db, sequelize);
+const note = model.note.createNoteModel(db, sequelize);
 
 task.hasMany(note, {
     onDelete: 'CASCADE',
