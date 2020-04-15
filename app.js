@@ -7,8 +7,6 @@ const db = require("./config/database")
 
 var app = express()
 
-const PORT = process.env.PORT || 6556;
-
 //test db
 db.authenticate()
     .then(() => console.log("Connection worked"))
@@ -44,10 +42,15 @@ db.authenticate()
 //     }
 // ]
 
-//creating rout
+//creating route
 app.get('/', (req, res) => {
-        res.send('INDEX')
-            //res.send(todos)
-    })
-    //to start the application
+    res.send('INDEX')
+        //res.send(todos)
+})
+
+//taskmanager routes
+app.use('/tasks', require('./routes/tasks'))
+
+const PORT = process.env.PORT || 6556;
+//to start the application
 app.listen(PORT, console.log(`Server started on port ${PORT}`))
