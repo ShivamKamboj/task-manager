@@ -45,7 +45,7 @@
                             <br>
                         </div>
                     </div>
-                    <input type="button" id="addTask" class="my-button my-block my-green my-left-align" value="Save Task" data-toggle="collapse" href="#collapseExample">
+                    <input type="button" id="add_Task" class="my-button my-block my-green my-left-align" value="Save Task" data-toggle="collapse" href="#collapseExample">
             </form>
             </div>
     </nav>
@@ -53,7 +53,7 @@
     <!-- Top menu on small screens -->
     <header class="my-bar my-top my-hide-large my-black my-xlarge">
         <span class="my-bar-item">more options here:-</span>
-        <a href="javascript:void(0)" class="my-right my-bar-item my-button" onclick="my_open()"><i class="fa fa-bars"></i></a>
+        <a href="javascript:void(0)" class="my-right my-bar-item my-button" onclick="w3_open()"><i class="fa fa-bars"></i></a>
     </header>
 
     <!-- Overlay effect when opening sidebar on small screens -->
@@ -63,7 +63,7 @@
     <div class="my-main my-white" style="margin-left:260px">
 
         <!-- Slideshow Header -->
-        <div class="my-container">
+        <div class="my-container" id="apartment">
             <h3 style="color: black;">dARK KNIGHT<img src="image/batman-icon.png" alt=""></h3>
             <h1 style="color: black;"><b>TASK MANAGER</b></h1>
             <h3><i>Always be up to date with you task and notes.</i></h3>
@@ -74,7 +74,7 @@
             <!-- table -->
             <div style="float: right; font-size: 20px; padding-right: 80px;">
                 <label>Sort By</label>
-                <select id="dataSorting">
+                <select id="data_Sorting">
                     <option value="all">All</option>
                     <option value="priority">Priority</option>
                     <option value="duedate">Due date</option>
@@ -84,24 +84,24 @@
 
 
             <br><br>
-            <table id="dataTable" class="table">
+            <table id="data_table" class="table">
                 <!-- content will come from JS -->
             </table>
 
-            <div id="editTheTask">
-                <div>
+            <div id="EditTheTask" class="modal">
+                <div class="modal-content">
                     <div style="padding : 20px;">
                         <label>Due :</label>
-                        <input type="Date" id="dueDateEdit">
+                        <input type="Date" id="DueDateEdit">
                         <br>
                         <label>Priority: </label>
-                        <select id="priorityEdit">
+                        <select id="PriorityEdit">
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
                             <option value="low">Low</option>
                         </select>
                         <label class="container">Completed : 
-                            <input type="checkbox" id = "statusEdit">
+                            <input type="checkbox" id = "StatusEdit">
                             <span class="checkmark"></span>
                         </label>
                         <br>
