@@ -356,3 +356,75 @@ async function updateTask(data) {
         alert("Task Not Updated, Please try again!");
     }
 }
+
+//Delete task
+async function deleteThisTask(data) {
+    try {
+        await fetch('/task/' + data, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then((response) => {
+            alert("Task Deleted Successfully")
+        }).then((json) => {
+            // console.log(json);
+        });
+        window.location.reload();
+    } catch (err) {
+        alert("Please try again!")
+    }
+}
+
+//OnClick Event
+submit.onclick = addTaskToDb;
+
+sortBy.onchange = getTaskFromDb;
+
+
+// SORTING TASKS
+function sortTask(tasks, sorting) {
+    if (sorting === 'priority') {
+        return sortingObject.prioritySorting(tasks);
+    } else if (sorting === 'duedate') {
+        return sortingObject.dateSorting(tasks);
+    } else if (sorting === 'status') {
+        return sortingObject.statusSorting(tasks);
+    } else {
+        return tasks;
+    }
+}
+
+// Util Object for sorting of data
+let sortingObject = {
+
+    // Sort Data By Status
+    statusSorting: function sortDataByStatus(data) {
+        let priorityOrder = { true: 1, false: 2 }
+        data.sort(function(d1, d2) {
+            return (priorityOrder[d1.status] - priorityOrder[d2.status])
+        })
+        return data;
+    },
+
+    // Sort Data by Date
+    dateSorting: function sortDataByDate(data) {
+        data.sort(function(d1, d2) {
+            if (d1.due < d2.due) return -1;
+            else if (d1.due > d2.due) return 1;
+            else return 0;
+        })
+        return data;
+    },
+
+    // Sort Data By Priority
+    prioritySorting: function sortDataByPriority(data) {
+        let priorityOrder = { 'HIGH': 1, 'MEDIUM': 2, 'LOW': 3 }
+
+        data.sort(function(d1, d2) {
+            return (priorityOrder[d1.priority] - priorityOrder[d2.priority])
+        })
+
+        return data
+    }
+}
