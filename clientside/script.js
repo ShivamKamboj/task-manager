@@ -150,6 +150,11 @@ function CreateNewElement(type, data) {
 
 async function addTaskToDb() {
 
+    if (title.value === "") {
+        alert("Please Enter Title to proceed!")
+        return;
+    }
+
     let task = {
         title: title.value,
         description: description.value,
