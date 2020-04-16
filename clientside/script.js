@@ -139,3 +139,11 @@ function addDataToTable(data) {
         }
     }
 }
+
+// Creating new element
+function CreateNewElement(type, data) {
+    let element = document.createElement(type);
+    if (data != null)
+        element.textContent = data;
+    return element;
+}
