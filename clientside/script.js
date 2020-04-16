@@ -327,3 +327,32 @@ function editPopUp(data) {
         alert("Try again!")
     }
 }
+
+// Update task through edit pop up field
+async function updateTask(data) {
+    let choice;
+    if (document.querySelector("#PriorityEdit").value === "") {
+        choice = "MEDIUM";
+    } else {
+        choice = document.querySelector("#PriorityEdit").value;
+    }
+    let updatedTask = {
+        duedate: document.querySelector("#DueDateEdit").value,
+        priority: choice,
+        status: document.querySelector("#StatusEdit").checked.toString()
+    }
+    try {
+        await fetch("/task/" + data, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedTask)
+        });
+        modal.style.display = "none";
+        getTaskFromDb();
+        alert("Task Updated Successfully");
+    } catch (error) {
+        alert("Task Not Updated, Please try again!");
+    }
+}
