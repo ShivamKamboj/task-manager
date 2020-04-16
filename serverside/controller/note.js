@@ -21,8 +21,13 @@ exports.getNotes = async(req, res) => {
     }
 }
 
+//const validatorObject = require('../validation/validationHandler')
 // create notes of particular task
 exports.createNote = async(req, res) => {
+    // const isContentValid = validatorObject.validateTitle(req.body.content)
+    // if (!isContentValid)
+    //     return res.status(400).send({ failure: 'Content not provided' })
+
     const id = req.params.id
     try {
         const note = await dbObject.note.create({
