@@ -147,3 +147,29 @@ function CreateNewElement(type, data) {
         element.textContent = data;
     return element;
 }
+
+async function addTaskToDb() {
+
+    let task = {
+        title: title.value,
+        description: description.value,
+        duedate: duedate.value,
+        status: "false",
+        priority: priority.options[priority.selectedIndex].value
+    };
+
+    try {
+        await fetch("/task", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        })
+        alert("Task Added Successfully")
+        getTaskFromDb()
+    } catch (error) {
+        alert("Error")
+        return;
+    }
+}
