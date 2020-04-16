@@ -26,16 +26,17 @@ app.use(routes.task)
 app.use(routes.note)
 
 
-const PORT = process.env.PORT || 6556;
+app.set('PORT', process.env.PORT || 5000);
 
 (async function() {
     try {
-        await db.queryInterface.sync()
-        await app.listen(PORT, () => {
-            console.log("Connection Established!")
+        db.queryInterface.sync().then(() => {
+            app.listen(app.get('PORT'), () => {
+                console.log("Connection Established!")
+            });
+
         })
     } catch (error) {
-        //yaha dekh issey aya msg
         console.error(error)
         console.log("Database error!")
     }
