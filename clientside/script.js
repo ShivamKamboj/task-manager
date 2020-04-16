@@ -30,3 +30,112 @@ tomorrowsDate.setDate(tomorrowsDate.getDate() + 1)
 const duedate = document.querySelector('#duedate')
 const defaultDate = tomorrowsDate.toJSON().substring(0, 10)
 duedate.value = defaultDate
+
+//Add Tasks To Table, with Notes
+function addDataToTable(data) {
+    let row = CreateNewElement('tr', null);
+    table.innerHTML = "";
+
+    // Task Tag Elements 
+    let myTitel = CreateNewElement('th', 'Titel');
+    let myTaskDescription = CreateNewElement('th', 'Description');
+    let myTaskPriority = CreateNewElement('th', 'Priority');
+    let myTaskStatus = CreateNewElement('th', 'Status');
+    let myDueStatus = CreateNewElement('th', 'Due Date');
+    table.appendChild(row);
+
+    // Styling
+    myTitel.style.fontFamily = "lato";
+    myTitel.style.fontSize = "30px";
+
+    myTaskDescription.style.fontFamily = "lato";
+    myTaskDescription.style.fontSize = "30px";
+
+    myTaskPriority.style.fontFamily = "lato";
+    myTaskPriority.style.fontSize = "30px";
+
+    myTaskStatus.style.fontFamily = "lato";
+    myTaskStatus.style.fontSize = "30px";
+
+    myDueStatus.style.fontFamily = "lato";
+    myDueStatus.style.fontSize = "30px";
+
+    // Append in row
+    row.appendChild(myTitel);
+    row.appendChild(myTaskDescription);
+    row.appendChild(myTaskPriority);
+    row.appendChild(myTaskStatus);
+    row.appendChild(myDueStatus);
+
+    if (data.length === 0) {
+        let row = CreateNewElement('tr', null);
+        table.appendChild(row);
+        let data = CreateNewElement('td', 'Nothing to Show!!');
+        row.appendChild(data);
+    } else {
+        // Sort Task and append notes
+        data = sortTask(data, sortBy.value);
+        for (let task of data) {
+
+            let row = CreateNewElement('tr', null);
+            table.appendChild(row);
+
+            let title = CreateNewElement('td', task.title);
+            title.style.fontSize = "15px";
+            title.style.fontFamily = "oswald"
+            row.appendChild(title);
+
+            if (task.description !== null && task.description !== "") {
+                let tdDescription = CreateNewElement('td', task.description);
+                tdDescription.style.fontSize = "15px"
+                row.appendChild(tdDescription);
+            } else {
+                let tdDescription = CreateNewElement('td', "No Description");
+                tdDescription.style.fontSize = "15px"
+                row.appendChild(tdDescription);
+            }
+            if (task.priority === 'HIGH') {
+                let tdChoice = CreateNewElement('td', 'High');
+                tdChoice.style.color = "red"
+                tdChoice.style.fontSize = "15px"
+                    //tdChoice.style.fontFamily = "gotu"
+                row.appendChild(tdChoice);
+            } else if (task.priority === 'MEDIUM') {
+                let tdChoice = CreateNewElement('td', 'Medium');
+                //tdChoice.style.color = "blue"
+                tdChoice.style.fontSize = "15px"
+                    //tdChoice.style.fontFamily = "gotu"
+                row.appendChild(tdChoice);
+            } else {
+                let tdChoice = CreateNewElement('td', 'Low');
+                //tdChoice.style.color = "green"
+                tdChoice.style.fontSize = "15px"
+                    // tdChoice.style.fontFamily = "gotu"
+                row.appendChild(tdChoice);
+            }
+
+            if (task.status === false) {
+                let tdChoice = CreateNewElement('td', 'Incomplete');
+                tdChoice.style.color = "red"
+                tdChoice.style.fontSize = "15px"
+                row.appendChild(tdChoice);
+            } else {
+                let tdChoice = CreateNewElement('td', 'Complete');
+                tdChoice.style.fontSize = "15px"
+                row.appendChild(tdChoice);
+            }
+
+            row.appendChild(CreateNewElement('td', task.duedate));
+
+            let NoteRow = CreateNewElement('tr', null);
+
+            table.appendChild(NoteRow);
+
+            let rowData = document.createElement('td');
+            NoteRow.className = 'notes';
+            NoteRow.appendChild(rowData);
+            getNotes(task.id, rowData);
+            rowData.colSpan = 6;
+        }
+    }
+}
