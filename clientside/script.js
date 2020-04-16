@@ -283,3 +283,25 @@ async function getNotes(id, rowData) {
             alert("Please try again");
         });
 }
+
+//Add Note to Database to particular
+async function addNote(input, id) {
+    try {
+        if (input.value !== "") {
+            let note = {
+                content: input.value
+            };
+            await fetch("/task/" + id + "/note", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(note)
+            });
+            getTaskFromDb();
+            alert("Note Added Successfully");
+        }
+    } catch (error) {
+        alert("Please try again!")
+    }
+}
