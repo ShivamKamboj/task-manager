@@ -1,11 +1,10 @@
-//Get Task
+//------ Task Fetcher
 async function getTaskFromDb() {
     title.value = "";
     description.value = "";
     duedate.value = defaultDate;
     priority.value = 'medium';
-
-    let response = await fetch("/task")
+    let response = await fetch("/task");
     if (response.ok) {
         let tasks = await response.json();
         addDataToTable(tasks);
@@ -14,29 +13,29 @@ async function getTaskFromDb() {
     }
 }
 
-//variable declaration
-const table = document.querySelector("#dataTable")
-const title = document.querySelector("#title")
-const description = document.querySelector("#description")
-const priority = document.querySelector('#priority')
-const note = document.querySelector('#note')
-const modal = document.querySelector("#editTheTask")
-const submit = document.querySelector("#addTask");
-const sortBy = document.querySelector("#dataSorting");
+//------ variable declaration
+const description = document.querySelector("#description");
+const title = document.querySelector("#title");
+const priority = document.querySelector("#priority");
+const table = document.querySelector("#data_table");
+const note = document.querySelector("#note");
+const modal = document.querySelector("#EditTheTask");
+const submit = document.querySelector("#add_Task");
+const sortBy = document.querySelector("#data_Sorting");
 
 //Set Default Date
-const tomorrowsDate = new Date(new Date())
-tomorrowsDate.setDate(tomorrowsDate.getDate() + 1)
-const duedate = document.querySelector('#duedate')
-const defaultDate = tomorrowsDate.toJSON().substring(0, 10)
-duedate.value = defaultDate
+const tomorrowsDate = new Date(new Date());
+tomorrowsDate.setDate(tomorrowsDate.getDate() + 1);
+const duedate = document.querySelector('#duedate');
+const defaultDate = tomorrowsDate.toJSON().substring(0, 10);
+duedate.value = defaultDate;
 
 //Add Tasks To Table, with Notes
-function addDataToTable(data) {
+function addDataToTable(tasks) {
     let row = CreateNewElement('tr', null);
     table.innerHTML = "";
 
-    // Task Tag Elements 
+    // Task Heading Tag Elements 
     let myTitel = CreateNewElement('th', 'Titel');
     let myTaskDescription = CreateNewElement('th', 'Description');
     let myTaskPriority = CreateNewElement('th', 'Priority');
@@ -44,45 +43,45 @@ function addDataToTable(data) {
     let myDueStatus = CreateNewElement('th', 'Due Date');
     table.appendChild(row);
 
-    // Styling
+    // Styling of Heading
     myTitel.style.fontFamily = "lato";
-    myTitel.style.fontSize = "30px";
+    myTitel.style.fontSize = "25px";
 
     myTaskDescription.style.fontFamily = "lato";
-    myTaskDescription.style.fontSize = "30px";
+    myTaskDescription.style.fontSize = "25px";
 
     myTaskPriority.style.fontFamily = "lato";
-    myTaskPriority.style.fontSize = "30px";
+    myTaskPriority.style.fontSize = "25px";
 
     myTaskStatus.style.fontFamily = "lato";
-    myTaskStatus.style.fontSize = "30px";
+    myTaskStatus.style.fontSize = "25px";
 
     myDueStatus.style.fontFamily = "lato";
-    myDueStatus.style.fontSize = "30px";
+    myDueStatus.style.fontSize = "25px";
 
-    // Append in row
+    // Append child in row
     row.appendChild(myTitel);
     row.appendChild(myTaskDescription);
     row.appendChild(myTaskPriority);
     row.appendChild(myTaskStatus);
     row.appendChild(myDueStatus);
 
-    if (data.length === 0) {
+    if (tasks.length === 0) {
         let row = CreateNewElement('tr', null);
         table.appendChild(row);
         let data = CreateNewElement('td', 'Nothing to Show!!');
         row.appendChild(data);
     } else {
-        // Sort Task and append notes
-        data = sortTask(data, sortBy.value);
-        for (let task of data) {
+        // Sort Task and append notes as well
+        tasks = sortTask(tasks, sortBy.value);
+        for (let task of tasks) {
 
             let row = CreateNewElement('tr', null);
             table.appendChild(row);
 
             let title = CreateNewElement('td', task.title);
             title.style.fontSize = "15px";
-            title.style.fontFamily = "oswald"
+            title.style.fontFamily = "lato"
             row.appendChild(title);
 
             if (task.description !== null && task.description !== "") {
@@ -98,19 +97,14 @@ function addDataToTable(data) {
                 let tdChoice = CreateNewElement('td', 'High');
                 tdChoice.style.color = "red"
                 tdChoice.style.fontSize = "15px"
-                    //tdChoice.style.fontFamily = "gotu"
                 row.appendChild(tdChoice);
             } else if (task.priority === 'MEDIUM') {
                 let tdChoice = CreateNewElement('td', 'Medium');
-                //tdChoice.style.color = "blue"
                 tdChoice.style.fontSize = "15px"
-                    //tdChoice.style.fontFamily = "gotu"
                 row.appendChild(tdChoice);
             } else {
                 let tdChoice = CreateNewElement('td', 'Low');
-                //tdChoice.style.color = "green"
                 tdChoice.style.fontSize = "15px"
-                    // tdChoice.style.fontFamily = "gotu"
                 row.appendChild(tdChoice);
             }
 
@@ -148,7 +142,8 @@ function CreateNewElement(type, data) {
     return element;
 }
 
-async function addTaskToDb() {
+//------ Add Task from User To DB--> /task POST request
+async function addTaskToDB() {
 
     if (title.value === "") {
         alert("Please Enter Title to proceed!")
@@ -170,24 +165,25 @@ async function addTaskToDb() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(task)
-        })
-        alert("Task Added Successfully")
-        getTaskFromDb()
+        });
+        alert("Task Addition Successful");
+        getTaskFromDb();
     } catch (error) {
-        alert("Error")
+        alert("Error");
         return;
     }
 }
 
-//Set and Fetch notes from Database 
+//Set and Fetch notes from Database  
+// /task/id/note  GET request
 async function getNotes(id, rowData) {
-    let list = CreateNewElement("ul", null)
+    let list = CreateNewElement("ul", null);
 
-    let noteHead = CreateNewElement("h4", "Notes.")
-    list.appendChild(noteHead)
-    list.className = "list-group"
+    let noteHead = CreateNewElement("h4", "Notes...");
+    list.appendChild(noteHead);
+    list.className = "list-group";
 
-    let deleteBtn = CreateNewElement("button", "Delete Task")
+    let deleteBtn = CreateNewElement("button", "Delete Task");
     deleteBtn.style.backgroundColor = "black"
     deleteBtn.style.color = "white"
     deleteBtn.type = "button"
@@ -197,17 +193,17 @@ async function getNotes(id, rowData) {
     deleteBtn.style.marginLeft = "14px"
     deleteBtn.style.padding = "6px"
 
-    let input = CreateNewElement("input", null)
-    input.className = "form-control mb-6"
-    input.placeholder = "Enter note"
-    input.id = id + "_input"
+    let input = CreateNewElement("input", null);
+    input.className = "form-control mb-6";
+    input.placeholder = "Enter note";
+    input.id = id + "_input";
 
     let addBtn = CreateNewElement("input", null);
     addBtn.className = "btn btn-success"
     addBtn.type = "button"
     addBtn.value = "Add Note"
     addBtn.style.backgroundColor = "black"
-    editBtn.style.borderRadius = "9px"
+    addBtn.style.borderRadius = "9px"
     addBtn.style.color = "white"
     addBtn.style.margin = "10px"
 
@@ -229,17 +225,15 @@ async function getNotes(id, rowData) {
                     if (data.failure === undefined) {
                         for (let note of data) {
                             let li = CreateNewElement("a", note.content);
-                            li.className = "list-group-item list-group-item-action";
                             li.style.fontFamily = "oswald";
                             list.appendChild(li);
                         }
                     } else {
                         let li = CreateNewElement(
                             "a",
-                            "No Note Found! To proceed add some note"
+                            "No Note Found! To proceed please add some note"
                         );
-                        li.className = "list-group-item list-group-item-action";
-                        li.style.fontFamily = "oswald";
+                        li.style.fontFamily = "Baloo Paaji 2";
                         list.appendChild(li);
                     }
                     list.appendChild(CreateNewElement("br"));
@@ -257,11 +251,11 @@ async function getNotes(id, rowData) {
                     };
                     rowData.appendChild(deleteBtn);
                     deleteBtn.onclick = function() {
-                        deleteThisTask(id);
+                        deleteTaskOverId(id);
                     };
                 })
                 .catch((err) => {
-                    let li = CreateNewElement("a", "No Notes!");
+                    let li = CreateNewElement("a", "No Notes Found!");
                     li.className = "list-group-item list-group-item-action";
                     li.style.fontFamily = "oswald";
                     list.appendChild(li);
@@ -280,16 +274,18 @@ async function getNotes(id, rowData) {
                     };
                     rowData.appendChild(deleteBtn);
                     deleteBtn.onclick = function() {
-                        deleteThisTask(id);
+                        deleteTaskOverId(id);
                     };
                 });
         })
         .catch((error) => {
+            // console.log(error);
             alert("Please try again");
         });
 }
 
 //Add Note to Database to particular record
+// task/id/note POST request
 async function addNote(input, id) {
     try {
         if (input.value !== "") {
@@ -304,24 +300,24 @@ async function addNote(input, id) {
                 body: JSON.stringify(note)
             });
             getTaskFromDb();
-            alert("Note Added Successfully");
+            alert("Note Addition Successful");
         }
     } catch (error) {
         alert("Please try again!")
     }
 }
 
-// Edit and Update Pop up model and task 
-function editPopUp(data) {
+// Edit and Update Pop up model and task  
+function editPopUp(id) {
     modal.style.display = "block";
-    console.log("Updated" + data);
+    console.log("Updated" + id);
     try {
-        fetch("/task/" + data).then((data) => data.json().then((data) => {
-            document.querySelector("#dueDateEdit").value = data.duedate;
-            document.querySelector("#priorityEdit").value = data.priority.toLowerCase();
-            document.querySelector("#statusEdit").checked = data.status;
+        fetch("/task/" + id).then((data) => data.json().then((data) => {
+            document.querySelector("#DueDateEdit").value = data.duedate;
+            document.querySelector("#PriorityEdit").value = data.priority.toLowerCase();
+            document.querySelector("#StatusEdit").checked = data.status;
             document.querySelector("#saveButton").onclick = function() {
-                updateTask(data);
+                updateTask(id);
             }
             document.querySelector("#closeButton").onclick = function() {
                 modal.style.display = "none";
@@ -329,12 +325,12 @@ function editPopUp(data) {
             }
         }));
     } catch (error) {
-        alert("Try again!")
+        alert("Please try again!")
     }
 }
 
 // Update task through edit pop up field
-async function updateTask(data) {
+async function updateTask(id) {
     let choice;
     if (document.querySelector("#PriorityEdit").value === "") {
         choice = "MEDIUM";
@@ -347,7 +343,7 @@ async function updateTask(data) {
         status: document.querySelector("#StatusEdit").checked.toString()
     }
     try {
-        await fetch("/task/" + data, {
+        await fetch("/task/" + id, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -356,43 +352,41 @@ async function updateTask(data) {
         });
         modal.style.display = "none";
         getTaskFromDb();
-        alert("Task Updated Successfully");
+        alert("Task Updation Successful");
     } catch (error) {
         alert("Task Not Updated, Please try again!");
     }
 }
 
 //Delete task
-async function deleteThisTask(data) {
+// --> task/id DELETE request
+async function deleteTaskOverId(id) {
     try {
-        await fetch('/task/' + data, {
+        await fetch('/task/' + id, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            alert("Task Deleted Successfully")
-        }).then((json) => {
-            // console.log(json);
-        });
+            alert("Task Deletion Successful")
+        }).then((json) => {});
         window.location.reload();
     } catch (err) {
         alert("Please try again!")
     }
 }
 
-//OnClick Event
-submit.onclick = addTaskToDb;
+//------ OnClick Event
+submit.onclick = addTaskToDB;
 
 sortBy.onchange = getTaskFromDb;
 
-
-// SORTING TASKS
+// SORTING DATA /TASKS
 function sortTask(tasks, sorting) {
     if (sorting === 'priority') {
-        return sortingObject.prioritySorting(tasks);
+        return sortingObject.prioritySort(tasks);
     } else if (sorting === 'duedate') {
-        return sortingObject.dateSorting(tasks);
+        return sortingObject.dateSort(tasks);
     } else if (sorting === 'status') {
         return sortingObject.statusSorting(tasks);
     } else {
@@ -400,43 +394,47 @@ function sortTask(tasks, sorting) {
     }
 }
 
-// Util Object for sorting of data
+//Object for sorting of Task
 let sortingObject = {
 
+
     // Sort Data By Status
-    statusSorting: function sortDataByStatus(data) {
+    statusSorting: function sortDataByStatus(task) {
         let priorityOrder = { true: 1, false: 2 }
-        data.sort(function(d1, d2) {
+        task.sort(function(d1, d2) {
             return (priorityOrder[d1.status] - priorityOrder[d2.status])
-        })
-        return data;
+        });
+        return task;
     },
 
     // Sort Data by Date
-    dateSorting: function sortDataByDate(data) {
-        data.sort(function(d1, d2) {
-            if (d1.due < d2.due) return -1;
-            else if (d1.due > d2.due) return 1;
-            else return 0;
-        })
-        return data;
+    dateSort: function sortDataByDate(task) {
+        task.sort((d1, d2) => {
+            if (d1.duedate < d2.duedate)
+                return -1;
+            else if (d1.duedate > d2.duedate)
+                return 1;
+            else
+                return 0;
+        });
+        return task;
     },
 
     // Sort Data By Priority
-    prioritySorting: function sortDataByPriority(data) {
+    prioritySort: function sortDataByPriority(task) {
         let priorityOrder = { 'HIGH': 1, 'MEDIUM': 2, 'LOW': 3 }
 
-        data.sort(function(d1, d2) {
+        task.sort(function(d1, d2) {
             return (priorityOrder[d1.priority] - priorityOrder[d2.priority])
-        })
+        });
 
-        return data
+        return task;
     }
 }
 
 /* for mobile devices*/
 // Script to open and close sidebar when on tablets and phones
-function my_open() {
+function w3_open() {
     document.getElementById("mySidebar").style.display = "block";
     document.getElementById("myOverlay").style.display = "block";
 }
@@ -474,6 +472,4 @@ function showDivs(n) {
     for (i = 0; i < dots.length; i++) {
         dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
     }
-    x[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " w3-opacity-off";
 }
