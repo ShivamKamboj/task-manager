@@ -173,3 +173,113 @@ async function addTaskToDb() {
         return;
     }
 }
+
+//Set and Fetch notes from Database 
+async function getNotes(id, rowData) {
+    let list = CreateNewElement("ul", null)
+
+    let noteHead = CreateNewElement("h4", "Notes.")
+    list.appendChild(noteHead)
+    list.className = "list-group"
+
+    let deleteBtn = CreateNewElement("button", "Delete Task")
+    deleteBtn.style.backgroundColor = "black"
+    deleteBtn.style.color = "white"
+    deleteBtn.type = "button"
+    deleteBtn.value = "Delete Task"
+    deleteBtn.style.borderRadius = "9px"
+    deleteBtn.style.fontSize = "14px"
+    deleteBtn.style.marginLeft = "14px"
+    deleteBtn.style.padding = "6px"
+
+    let input = CreateNewElement("input", null)
+    input.className = "form-control mb-6"
+    input.placeholder = "Enter note"
+    input.id = id + "_input"
+
+    let addBtn = CreateNewElement("input", null);
+    addBtn.className = "btn btn-success"
+    addBtn.type = "button"
+    addBtn.value = "Add Note"
+    addBtn.style.backgroundColor = "black"
+    editBtn.style.borderRadius = "9px"
+    addBtn.style.color = "white"
+    addBtn.style.margin = "10px"
+
+    let editBtn = CreateNewElement("button", "Edit Task");
+    editBtn.style.backgroundColor = "black"
+    editBtn.style.color = "white"
+    editBtn.type = "button"
+    editBtn.value = "Edit Task"
+    editBtn.style.borderRadius = "9px"
+    editBtn.style.fontSize = "16px"
+    editBtn.style.padding = "6px"
+    editBtn.className = "editButton"
+
+    fetch("/task/" + id + "/note")
+        .then((response) => {
+            response
+                .json()
+                .then((data) => {
+                    if (data.failure === undefined) {
+                        for (let note of data) {
+                            let li = CreateNewElement("a", note.content);
+                            li.className = "list-group-item list-group-item-action";
+                            li.style.fontFamily = "oswald";
+                            list.appendChild(li);
+                        }
+                    } else {
+                        let li = CreateNewElement(
+                            "a",
+                            "No Note Found! To proceed add some note"
+                        );
+                        li.className = "list-group-item list-group-item-action";
+                        li.style.fontFamily = "oswald";
+                        list.appendChild(li);
+                    }
+                    list.appendChild(CreateNewElement("br"));
+                    rowData.appendChild(list);
+                    rowData.appendChild(input);
+                    rowData.appendChild(CreateNewElement("br"));
+                    rowData.appendChild(addBtn);
+                    rowData.appendChild(editBtn);
+                    input.type = "text";
+                    addBtn.onclick = function() {
+                        addNote(input, id);
+                    };
+                    editBtn.onclick = function() {
+                        editPopUp(id);
+                    };
+                    rowData.appendChild(deleteBtn);
+                    deleteBtn.onclick = function() {
+                        deleteThisTask(id);
+                    };
+                })
+                .catch((err) => {
+                    let li = CreateNewElement("a", "No Notes!");
+                    li.className = "list-group-item list-group-item-action";
+                    li.style.fontFamily = "oswald";
+                    list.appendChild(li);
+                    list.appendChild(CreateNewElement("br"));
+                    rowData.appendChild(list);
+                    rowData.appendChild(input);
+                    rowData.appendChild(CreateNewElement("br"));
+                    rowData.appendChild(addBtn);
+                    rowData.appendChild(editBtn);
+                    input.type = "text";
+                    addBtn.onclick = function() {
+                        addNote(input, id);
+                    };
+                    editBtn.onclick = function() {
+                        editPopUp(id);
+                    };
+                    rowData.appendChild(deleteBtn);
+                    deleteBtn.onclick = function() {
+                        deleteThisTask(id);
+                    };
+                });
+        })
+        .catch((error) => {
+            alert("Please try again");
+        });
+}
