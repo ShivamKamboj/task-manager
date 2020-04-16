@@ -4,87 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji+2|Baloo+Tamma+2|Gotu|Lato|Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <title>ToDo</title>
+
+    <title>Task Manager</title>
 </head>
 
-<body onload="getData()">
-    <h1 align="center">Task Manager</h1>
-    <center>
-        <label>Title<span style="color : red">*</span> : </label>
-        <input type="text" id="title">
-        <label>Description : </label>
-        <input type="text" id="description">
-        <br />
-        <label>Due:<span style="color : red">*</span> </label>
-        <input type="date" id="due">
-        <label>Priority :<span style="color : red"> *</span> </label>
-        <select id="priority">
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="low">Low</option>
-        </select>
-        <br />
-        <label>Note : </label>
-        <input type="text" id="note" style="width : 70%">
-        <br />
-        <input type="button" value="Add Task" id="btn">
-        <p id='err'></p>
-        <br />
+<body class="content border-left border-right" onload="taskFetcher()">
 
-        <label>Sort by:<span style="color : red">*</span> </label>
-        <select id="sort">
-            <option value="due">Due date</option>
-            <option value="priority">Priority</option>
-            <option value="status">Status</option>
-        </select>
-    </center>
-
-    <br />
-
-    <table id="table"></table>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class='editHeader'>
-                <span class="close">&times;</span>
+    <!-- Sidebar/menu -->
+    <nav class="my-sidebar my-light-grey my-collapse my-top" style="z-index:3;width:260px" id="mySidebar">
+        <div class="my-container my-display-container my-padding-16">
+            <i onclick="my_close()" class="fa fa-remove my-hide-large my-button my-transparent my-display-topright"></i>
+            <center>
+                <img src="image/imag5.png" alt="icon" style="height: 200px;">
+            </center>
+            <form>
+                <div style="padding: 20px;">
+                    <div>
+                        <label></i>Title</label>
+                        <input class="my-input my-border" type="text" id="title">
+                        <label>Description : </label>
+                        <textarea class="my-input my-border" id="description"></textarea>
+                    </div>
+                    <div>
+                        <div>
+                            <label>Priority:</label>
+                            <select class="my-input my-border" id="priority">
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                        </select>
+                        </div>
+                        <div>
+                            <label><i class="fa fa-calendar-check-o"></i>Due Date:</label>
+                            <input class="my-input my-border" type="date" id="duedate">
+                            <br>
+                        </div>
+                    </div>
+                    <input type="button" id="addTask" class="my-button my-block my-green my-left-align" value="Save Task" data-toggle="collapse" href="#collapseExample">
+            </form>
             </div>
-            <div style="padding : 20px;">
-                <label>Title<span style="color : red">*</span> : </label>
-                <input type="text" id="editTitle" style="color : gray" readonly>
-                <label>Description : </label>
-                <input type="text" id="editDescription" style="color : gray" readonly>
-                <br />
-                <label>Due :<span style="color : red">*</span> </label>
-                <input type="Date" id="editDue">
-                <label>Priority:<span style="color : red">*</span> </label>
-                <select id="editPriority">
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="low">Low</option>
-                </select>
-                <label class="container">Completed :
-                    <input type="checkbox" id="editStatuss">
-                    <span class="checkmark"></span>
-                </label>
-                <input type="button" value="Save" id="saveBtn">
-            </div>
+    </nav>
+
+    <!-- Top menu on small screens -->
+    <header class="my-bar my-top my-hide-large my-black my-xlarge">
+        <span class="my-bar-item">more options here:-</span>
+        <a href="javascript:void(0)" class="my-right my-bar-item my-button" onclick="my_open()"><i class="fa fa-bars"></i></a>
+    </header>
+
+    <!-- Overlay effect when opening sidebar on small screens -->
+    <div class="my-overlay my-hide-large" onclick="my_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="my-main my-white" style="margin-left:260px">
+
+        <!-- Slideshow Header -->
+        <div class="my-container">
+            <h3 style="color: black;">dARK KNIGHT<img src="image/batman-icon.png" alt=""></h3>
+            <h1 style="color: black;"><b>TASK MANAGER</b></h1>
+            <h3><i>Always be up to date with you task and notes.</i></h3>
         </div>
+        <hr>
+        <br>
+        <div>
+            <!-- table -->
+            <div style="float: right; font-size: 20px; padding-right: 80px;">
+                <label>Sort By</label>
+                <select id="dataSorting">
+                    <option value="all">All</option>
+                    <option value="priority">Priority</option>
+                    <option value="duedate">Due date</option>
+                    <option value="status">Status</option>
+                </select>
+            </div>
 
+
+            <br><br>
+            <table id="dataTable" class="table">
+                <!-- content will come from JS -->
+            </table>
+
+            <div id="editTheTask">
+                <div>
+                    <div style="padding : 20px;">
+                        <label>Due :</label>
+                        <input type="Date" id="dueDateEdit">
+                        <br>
+                        <label>Priority: </label>
+                        <select id="priorityEdit">
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <label class="container">Completed : 
+                            <input type="checkbox" id = "statusEdit">
+                            <span class="checkmark"></span>
+                        </label>
+                        <br>
+                        <input type="button" class="btn btn-danger" value="Save" id="saveButton">
+                        <input type="button" class="btn btn-info" value="Close" id="closeButton">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- End page content -->
     </div>
 </body>
 
-</html>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script async defer src="script.js"></script>
 <script async defer src="jquery.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
+
+</html>
