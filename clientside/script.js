@@ -284,7 +284,7 @@ async function getNotes(id, rowData) {
         });
 }
 
-//Add Note to Database to particular
+//Add Note to Database to particular record
 async function addNote(input, id) {
     try {
         if (input.value !== "") {
@@ -303,5 +303,27 @@ async function addNote(input, id) {
         }
     } catch (error) {
         alert("Please try again!")
+    }
+}
+
+// Edit and Update Pop up model and task 
+function editPopUp(data) {
+    modal.style.display = "block";
+    console.log("Updated" + data);
+    try {
+        fetch("/task/" + data).then((data) => data.json().then((data) => {
+            document.querySelector("#dueDateEdit").value = data.duedate;
+            document.querySelector("#priorityEdit").value = data.priority.toLowerCase();
+            document.querySelector("#statusEdit").checked = data.status;
+            document.querySelector("#saveButton").onclick = function() {
+                updateTask(data);
+            }
+            document.querySelector("#closeButton").onclick = function() {
+                modal.style.display = "none";
+                document.querySelector("#saveButton").onclick = null;
+            }
+        }));
+    } catch (error) {
+        alert("Try again!")
     }
 }
